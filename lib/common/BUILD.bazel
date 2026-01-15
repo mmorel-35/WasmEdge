@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2019-2024 Second State INC
+
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "common",
+    srcs = [
+        "errinfo.cpp",
+        "hash.cpp",
+        "hexstr.cpp",
+        "spdlog.cpp",
+    ],
+    hdrs = glob([
+        "//include/common/*.h",
+        "//include/common/*.hpp",
+    ]),
+    includes = [
+        "//include",
+    ],
+    deps = [
+        "@spdlog",
+    ],
+)

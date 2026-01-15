@@ -1,0 +1,38 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2019-2024 Second State INC
+
+# Build with C++20
+build --cxxopt=-std=c++20
+build --host_cxxopt=-std=c++20
+
+# Enable optimization for release builds
+build:release --compilation_mode=opt
+build:release --copt=-O3
+build:release --copt=-DNDEBUG
+
+# Debug builds
+build:debug --compilation_mode=dbg
+build:debug --copt=-g
+build:debug --strip=never
+
+# Default to optimized builds
+build --compilation_mode=opt
+
+# Enable color diagnostics
+build --color=yes
+
+# Show test output
+test --test_output=errors
+
+# Use C++20 filesystem
+build --cxxopt=-DUSE_STD_FILESYSTEM
+
+# Platform-specific settings
+build:linux --cxxopt=-fPIC
+build:macos --cxxopt=-fPIC
+
+# Enable verbose failures
+build --verbose_failures
+
+# Keep going on test failures
+test --keep_going
