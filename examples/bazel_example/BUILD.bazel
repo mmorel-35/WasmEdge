@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2019-2024 Second State INC
+
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+cc_binary(
+    name = "example",
+    srcs = ["main.cpp"],
+    deps = [
+        "@wasmedge//lib/api",
+    ],
+)

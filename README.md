@@ -26,6 +26,7 @@ WasmEdge is a lightweight, high-performance, and extensible WebAssembly runtime.
 
 🚀 [Install](https://wasmedge.org/docs/start/install) WasmEdge \
 👷🏻‍♂️ [Build](https://wasmedge.org/docs/category/build-wasmedge-from-source) and [contribute to](https://wasmedge.org/docs/contribute/) WasmEdge \
+🔧 [Build with Bazel](docs/BUILD_WITH_BAZEL.md) for hermetic and reproducible builds \
 ⌨️ [Run](https://wasmedge.org/docs/category/running-with-wasmedge) a standalone Wasm program or a [JavaScript program](https://wasmedge.org/docs/category/develop-wasm-apps-in-javascript) from CLI or [Docker](https://wasmedge.org/docs/start/getting-started/quick_start_docker) \
 🤖 [Chat](https://llamaedge.com/docs/intro) with an open source LLM via [LlamaEdge](https://github.com/LlamaEdge/LlamaEdge) \
 🔌 Embed a Wasm function in your [Go](https://wasmedge.org/docs/category/go-sdk-for-embedding-wasmedge), [Rust](https://wasmedge.org/docs/category/rust-sdk-for-embedding-wasmedge), or [C](https://wasmedge.org/docs/category/c-sdk-for-embedding-wasmedge) app \

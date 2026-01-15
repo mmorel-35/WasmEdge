@@ -1,0 +1,29 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2019-2024 Second State INC
+
+# For this example, we reference the parent WasmEdge workspace.
+# In a real project, you would use http_archive to fetch WasmEdge:
+#
+# load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+# 
+# http_archive(
+#     name = "wasmedge",
+#     sha256 = "...",
+#     strip_prefix = "WasmEdge-<version>",
+#     urls = ["https://github.com/WasmEdge/WasmEdge/archive/refs/tags/<version>.tar.gz"],
+# )
+
+workspace(name = "wasmedge_example")
+
+local_repository(
+    name = "wasmedge",
+    path = "../..",
+)
+
+load("@wasmedge//bazel:repositories.bzl", "wasmedge_repositories")
+
+wasmedge_repositories()
+
+load("@wasmedge//bazel:dependencies.bzl", "wasmedge_dependencies")
+
+wasmedge_dependencies()
