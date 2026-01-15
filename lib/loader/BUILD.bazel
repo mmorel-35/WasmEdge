@@ -1,0 +1,43 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2019-2024 Second State INC
+
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "loader_filemgr",
+    srcs = [
+        "aot_section.cpp",
+        "filemgr.cpp",
+        "shared_library.cpp",
+    ],
+    hdrs = glob(["//include/loader/*.h"]),
+    includes = ["//include"],
+    linkopts = select({
+        "@platforms//os:windows": [],
+        "//conditions:default": ["-ldl"],
+    }),
+    deps = [
+        "//lib/common",
+        "//lib/system",
+    ],
+)
+
+cc_library(
+    name = "loader",
+    srcs = glob([
+        "ast/**/*.cpp",
+        "serialize/**/*.cpp",
+        "loader.cpp",
+    ]),
+    hdrs = glob([
+        "//include/ast/**/*.h",
+        "//include/loader/**/*.h",
+    ]),
+    includes = ["//include"],
+    deps = [
+        ":loader_filemgr",
+        "//lib/common",
+    ],
+)

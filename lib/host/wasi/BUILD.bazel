@@ -1,0 +1,54 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2019-2024 Second State INC
+
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "host_wasi",
+    srcs = [
+        "environ.cpp",
+        "vfs_io.cpp",
+        "vinode.cpp",
+        "wasifunc.cpp",
+        "wasimodule.cpp",
+    ] + select({
+        "@platforms//os:macos": [
+            "clock-macos.cpp",
+            "environ-macos.cpp",
+            "inode-macos.cpp",
+            "macos.mm",
+        ],
+        "@platforms//os:windows": [
+            "clock-win.cpp",
+            "environ-win.cpp",
+            "inode-win.cpp",
+        ],
+        "//conditions:default": [
+            "clock-linux.cpp",
+            "environ-linux.cpp",
+            "inode-linux.cpp",
+        ],
+    }),
+    hdrs = glob(["//include/host/wasi/*.h"]),
+    includes = [
+        "//include",
+        "//thirdparty",
+    ],
+    linkopts = select({
+        "@platforms//os:macos": [],
+        "@platforms//os:windows": [
+            "-lktmw32",
+            "-lntdll",
+            "-lwsock32",
+            "-lws2_32",
+            "-lpathcch",
+            "-lshlwapi",
+        ],
+        "//conditions:default": ["-lrt"],
+    }),
+    deps = [
+        "//lib/system",
+    ],
+)

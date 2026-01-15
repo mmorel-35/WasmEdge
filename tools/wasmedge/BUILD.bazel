@@ -1,0 +1,22 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2019-2024 Second State INC
+
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_binary(
+    name = "wasmedge",
+    srcs = ["wasmedge.cpp"],
+    deps = [
+        "//lib/api",
+    ],
+)
+
+cc_binary(
+    name = "wasmedgec",
+    srcs = ["wasmedgec.cpp"],
+    deps = [
+        "//lib/api",
+    ],
+)

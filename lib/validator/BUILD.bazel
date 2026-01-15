@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2019-2024 Second State INC
+
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "validator",
+    srcs = [
+        "component_validator.cpp",
+        "formchecker.cpp",
+        "validator.cpp",
+    ],
+    hdrs = glob(["//include/validator/*.h"]),
+    includes = ["//include"],
+    deps = [
+        "//lib/common",
+    ],
+)
