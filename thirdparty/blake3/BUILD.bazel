@@ -81,10 +81,14 @@ cc_library(
     alwayslink = True,
 )
 
-# NEON implementation (ARM)
+# NEON implementation (ARM only)
 cc_library(
     name = "blake3_neon",
-    srcs = ["blake3_neon.c"],
+    srcs = select({
+        "@platforms//cpu:aarch64": ["blake3_neon.c"],
+        "@platforms//cpu:arm64": ["blake3_neon.c"],
+        "//conditions:default": [],
+    }),
     hdrs = [
         "blake3.h",
         "blake3_impl.h",
