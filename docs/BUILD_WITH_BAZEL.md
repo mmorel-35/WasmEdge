@@ -1,5 +1,7 @@
 # Building WasmEdge with Bazel
 
+WasmEdge supports both traditional WORKSPACE-based and modern Bzlmod (MODULE.bazel) builds.
+
 ## Quick Start
 
 ```bash
@@ -49,6 +51,16 @@ For production use with AOT, consider:
 
 ## Using WasmEdge in Your Bazel Project
 
+### With Bzlmod (MODULE.bazel) - Recommended
+
+Add to your `MODULE.bazel` file:
+
+```python
+bazel_dep(name = "wasmedge", version = "0.14.0")
+```
+
+### With WORKSPACE (Legacy)
+
 Add to your `WORKSPACE` file:
 
 ```python
@@ -68,6 +80,8 @@ load("@wasmedge//bazel:dependencies.bzl", "wasmedge_dependencies")
 wasmedge_dependencies()
 ```
 
+### Using in BUILD files
+
 Add to your `BUILD.bazel` file:
 
 ```python
@@ -81,4 +95,5 @@ cc_binary(
 ## Resources
 
 - [Bazel Documentation](https://bazel.build/docs)
+- [Bzlmod Guide](https://bazel.build/build/bzlmod)
 - [WasmEdge Documentation](https://wasmedge.org/docs/)

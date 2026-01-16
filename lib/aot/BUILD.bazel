@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: 2019-2024 Second State INC
+# SPDX-FileCopyrightText: 2019-2026 Second State INC
 
 # WasmEdge AOT (Ahead-of-Time) compilation library
 # This library is only needed when AOT compilation is enabled.

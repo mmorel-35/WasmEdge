@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: 2019-2024 Second State INC
+# SPDX-FileCopyrightText: 2019-2026 Second State INC
 
 # WasmEdge LLVM library for AOT compilation
 # This library is only needed when AOT compilation is enabled.

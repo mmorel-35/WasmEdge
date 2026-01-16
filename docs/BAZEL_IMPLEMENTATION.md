@@ -4,11 +4,12 @@ This document provides technical details about the Bazel workspace implementatio
 
 ## Overview
 
-WasmEdge now supports Bazel builds alongside CMake. The implementation follows patterns from [proxy-wasm-cpp-host](https://github.com/proxy-wasm/proxy-wasm-cpp-host).
+WasmEdge now supports Bazel builds alongside CMake. The implementation follows patterns from [proxy-wasm-cpp-host](https://github.com/proxy-wasm/proxy-wasm-cpp-host) and supports both traditional WORKSPACE and modern Bzlmod (MODULE.bazel) approaches.
 
 ## File Structure
 
-- `WORKSPACE` - Main workspace file
+- `MODULE.bazel` - Modern Bzlmod module definition (recommended)
+- `WORKSPACE` - Legacy workspace file (for compatibility)
 - `.bazelrc` - Build configuration with AOT support
 - `.bazelversion` - Specifies Bazel 6.5.0
 - `BUILD.bazel` - Root build file
@@ -19,6 +20,7 @@ WasmEdge now supports Bazel builds alongside CMake. The implementation follows p
 
 ## Key Features
 
+- **Bzlmod support**: Modern module system for future-proof dependency management
 - **Hermetic builds**: All dependencies are explicit and versioned
 - **Platform support**: Linux, macOS, Windows via `select()` statements
 - **External dependencies**: fmt, spdlog, simdjson via `http_archive`
@@ -68,6 +70,19 @@ The `.bazelrc` file defines several build configurations:
 - `--config=debug` - Debug build with symbols
 - `--config=aot` - Enable AOT compilation with LLVM
 
+## Bzlmod vs WORKSPACE
+
+**Bzlmod (MODULE.bazel)** - Recommended for new projects:
+- Modern dependency management
+- Better version resolution
+- Simpler configuration
+- Future-proof
+
+**WORKSPACE** - For compatibility:
+- Traditional approach
+- Required for older Bazel versions
+- Both files are provided for flexibility
+
 ## Not Included
 
 The following are not yet part of the Bazel build and can be added incrementally:
@@ -79,5 +94,6 @@ The following are not yet part of the Bazel build and can be added incrementally
 ## References
 
 - [Bazel Documentation](https://bazel.build/docs)
+- [Bzlmod Guide](https://bazel.build/build/bzlmod)
 - [proxy-wasm-cpp-host](https://github.com/proxy-wasm/proxy-wasm-cpp-host)
 - [LLVM Project](https://llvm.org/)
