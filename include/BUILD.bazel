@@ -74,13 +74,13 @@ genrule(
 # All WasmEdge headers
 cc_library(
     name = "headers",
-    hdrs = glob(["**/*.h", "**/*.hpp", "**/*.inc"], exclude=["api/wasmedge/version.h.in", "common/version.h.in", "common/config.h.in"]) + [
+    hdrs = glob(["**/*.h", "**/*.hpp", "**/*.inc", "**/*.ipp"], exclude=["api/wasmedge/version.h.in", "common/version.h.in", "common/config.h.in"]) + [
         ":generate_version_h",
         ":generate_config_h",
         ":generate_api_version_h",
         ":copy_enum_headers",
     ],
-    includes = ["api"],
+    includes = ["api", "executor"],
     strip_include_prefix = ".",
 )
 

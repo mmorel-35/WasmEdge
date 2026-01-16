@@ -143,14 +143,14 @@ struct span : public detail::span_storage<T, Extent> {
   using detail::span_storage<T, Extent>::size;
 
   constexpr span() noexcept = default;
-  // Non-template constructors for pointers (works for both fixed and dynamic extent)
+  // Non-template constructors for raw pointers
   constexpr span(T *first, T *last) noexcept : base(first, last - first) {}
   constexpr span(T *ptr, size_t count) noexcept : base(ptr, count) {}
-  template <class It,
-            enable_if_t<detail::is_compatible_iterator_v<T, It> && !is_pointer_v<It>> * = nullptr>
+  // Template constructors for all iterators
+  template <class It>
   constexpr span(It first, size_t count) noexcept
       : base(to_address(first), count) {}
-  template <class It, enable_if_t<detail::is_compatible_iterator_v<T, It> && !is_pointer_v<It>> * = nullptr>
+  template <class It>
   constexpr span(It first, It last) noexcept
       : base(to_address(first), last - first) {}
   template <size_t N>

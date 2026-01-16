@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2019-2026 Second State INC
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "wasi_headers",
+    hdrs = glob(["wasi/**/*.hpp", "wasi/**/*.h"]),
+    strip_include_prefix = ".",
+)
+
+cc_library(
+    name = "wasi_crypto_headers",
+    hdrs = glob(["wasi_crypto/**/*.hpp", "wasi_crypto/**/*.h"]),
+    strip_include_prefix = ".",
+)

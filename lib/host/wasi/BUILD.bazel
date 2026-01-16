@@ -31,9 +31,6 @@ cc_library(
             "inode-linux.cpp",
         ],
     }),
-    includes = [
-        "../../../thirdparty",
-    ],
     linkopts = select({
         "@platforms//os:macos": [],
         "@platforms//os:windows": [
@@ -49,5 +46,6 @@ cc_library(
     deps = [
         "//include:headers",
         "//lib/system",
+        "//thirdparty:wasi_headers",
     ],
 )
