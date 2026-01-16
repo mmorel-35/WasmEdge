@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: 2019-2026 Second State INC
 
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
@@ -9,27 +11,83 @@ cc_library(
         "blake3.c",
         "blake3_dispatch.c",
         "blake3_portable.c",
-    ] + select({
-        "@platforms//cpu:x86_64": [
-            "blake3_avx2.c",
-            "blake3_avx512.c",
-            "blake3_sse2.c",
-            "blake3_sse41.c",
-        ],
-        "@platforms//cpu:aarch64": [
-            "blake3_neon.c",
-        ],
-        "//conditions:default": [],
-    }),
+    ],
     hdrs = [
         "blake3.h",
         "blake3_impl.h",
     ],
-    copts = select({
+    deps = select({
         "@platforms//cpu:x86_64": [
-            "-msse2",
-            "-msse4.1",
+            ":blake3_sse2",
+            ":blake3_sse41",
+            ":blake3_avx2",
+            ":blake3_avx512",
+        ],
+        "@platforms//cpu:aarch64": [
+            ":blake3_neon",
         ],
         "//conditions:default": [],
     }),
+)
+
+# SSE2 implementation
+cc_library(
+    name = "blake3_sse2",
+    srcs = ["blake3_sse2.c"],
+    hdrs = [
+        "blake3.h",
+        "blake3_impl.h",
+    ],
+    copts = ["-msse2"],
+    alwayslink = True,
+)
+
+# SSE4.1 implementation
+cc_library(
+    name = "blake3_sse41",
+    srcs = ["blake3_sse41.c"],
+    hdrs = [
+        "blake3.h",
+        "blake3_impl.h",
+    ],
+    copts = ["-msse4.1"],
+    alwayslink = True,
+)
+
+# AVX2 implementation
+cc_library(
+    name = "blake3_avx2",
+    srcs = ["blake3_avx2.c"],
+    hdrs = [
+        "blake3.h",
+        "blake3_impl.h",
+    ],
+    copts = ["-mavx2"],
+    alwayslink = True,
+)
+
+# AVX512 implementation
+cc_library(
+    name = "blake3_avx512",
+    srcs = ["blake3_avx512.c"],
+    hdrs = [
+        "blake3.h",
+        "blake3_impl.h",
+    ],
+    copts = [
+        "-mavx512f",
+        "-mavx512vl",
+    ],
+    alwayslink = True,
+)
+
+# NEON implementation (ARM)
+cc_library(
+    name = "blake3_neon",
+    srcs = ["blake3_neon.c"],
+    hdrs = [
+        "blake3.h",
+        "blake3_impl.h",
+    ],
+    alwayslink = True,
 )
