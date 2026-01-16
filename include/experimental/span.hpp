@@ -143,11 +143,10 @@ struct span : public detail::span_storage<T, Extent> {
   using detail::span_storage<T, Extent>::size;
 
   constexpr span() noexcept = default;
-  
+
   // Non-template constructors for raw pointers (fixes first<>/last<> calls)
-  constexpr span(T* first, size_t count) noexcept
-      : base(first, count) {}
-  
+  constexpr span(T *first, size_t count) noexcept : base(first, count) {}
+
   template <class It,
             enable_if_t<detail::is_compatible_iterator_v<T, It>> * = nullptr>
   constexpr span(It first, size_t count) noexcept
@@ -245,15 +244,15 @@ span(R &&) -> span<remove_pointer_t<decltype(data(declval<R>()))>>;
 template <class T, size_t N> auto as_bytes(span<T, N> s) noexcept {
   constexpr size_t NewExtend =
       (N == dynamic_extent ? dynamic_extent : sizeof(T) * N);
-  return span<const std::byte, NewExtend>(reinterpret_cast<const std::byte *>(s.data()),
-                                     s.size_bytes());
+  return span<const std::byte, NewExtend>(
+      reinterpret_cast<const std::byte *>(s.data()), s.size_bytes());
 }
 
 template <class T, size_t N> auto as_writable_bytes(span<T, N> s) noexcept {
   constexpr size_t NewExtend =
       (N == dynamic_extent ? dynamic_extent : sizeof(T) * N);
   return span<std::byte, NewExtend>(reinterpret_cast<std::byte *>(s.data()),
-                               s.size_bytes());
+                                    s.size_bytes());
 }
 
 } // namespace cxx20

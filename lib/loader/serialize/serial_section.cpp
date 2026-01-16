@@ -226,7 +226,8 @@ Serializer::serializeSection(const AST::TagSection &Sec,
                              std::vector<uint8_t> &OutVec) const noexcept {
   // Tag section: 0x0D + size:u32 + content:vec(tag)
   return serializeSectionContent(
-      Sec, 0x0DU, OutVec, [=, this](const AST::TagType &R, std::vector<uint8_t> &V) {
+      Sec, 0x0DU, OutVec,
+      [=, this](const AST::TagType &R, std::vector<uint8_t> &V) {
         return serializeType(R, V);
       });
 }
