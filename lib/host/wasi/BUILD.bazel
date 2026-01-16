@@ -5,17 +5,6 @@ load("@rules_cc//cc:defs.bzl", "cc_library")
 
 package(default_visibility = ["//visibility:public"])
 
-# macOS Objective-C++ file
-objc_library(
-    name = "host_wasi_macos_objc",
-    srcs = ["macos.mm"],
-    hdrs = [],
-    deps = [
-        "//include:headers",
-    ],
-    target_compatible_with = ["@platforms//os:macos"],
-)
-
 cc_library(
     name = "host_wasi",
     srcs = [
@@ -29,6 +18,7 @@ cc_library(
             "clock-macos.cpp",
             "environ-macos.cpp",
             "inode-macos.cpp",
+            "macos.mm",
         ],
         "@platforms//os:windows": [
             "clock-win.cpp",
@@ -57,8 +47,5 @@ cc_library(
         "//include:headers",
         "//lib/system",
         "//thirdparty:wasi_headers",
-    ] + select({
-        "@platforms//os:macos": [":host_wasi_macos_objc"],
-        "//conditions:default": [],
-    }),
+    ],
 )

@@ -22,15 +22,12 @@ genrule(
 # Generate config.h from config.h.in
 genrule(
     name = "generate_config_h",
-    srcs = ["common/config.h.in"],
+    srcs = [
+        "common/config.h.in",
+        "//tools:generate_config.py",
+    ],
     outs = ["common/config.h"],
-    cmd = """
-    sed -e 's|@CMAKE_INSTALL_FULL_LOCALSTATEDIR@|/var/lib|g' \
-        -e 's|#cmakedefine HAVE_MMAP.*|#define HAVE_MMAP 1|g' \
-        -e 's|#cmakedefine HAVE_PWD_H.*|#define HAVE_PWD_H 1|g' \
-        -e 's|#cmakedefine CMAKE_INSTALL_FULL_LOCALSTATEDIR.*|#define CMAKE_INSTALL_FULL_LOCALSTATEDIR "/var/lib"|g' \
-        $< > $@
-    """,
+    cmd = "python3 $(location //tools:generate_config.py) $(location common/config.h.in) $@",
 )
 
 # Generate api/wasmedge/version.h from version.h.in
