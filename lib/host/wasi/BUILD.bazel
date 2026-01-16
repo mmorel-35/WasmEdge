@@ -30,6 +30,11 @@ cc_library(
             "inode-linux.cpp",
         ],
     }),
+    hdrs = select({
+        "@platforms//os:macos": ["macos.h"],
+        "@platforms//os:windows": ["win.h"],
+        "//conditions:default": ["linux.h"],
+    }),
     linkopts = select({
         "@platforms//os:macos": [],
         "@platforms//os:windows": [
