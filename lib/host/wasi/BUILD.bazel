@@ -18,7 +18,6 @@ cc_library(
             "clock-macos.cpp",
             "environ-macos.cpp",
             "inode-macos.cpp",
-            "macos.mm",
         ],
         "@platforms//os:windows": [
             "clock-win.cpp",

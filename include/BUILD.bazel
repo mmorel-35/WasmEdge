@@ -3,6 +3,8 @@
 
 # Header-only libraries for WasmEdge include files
 
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
 package(default_visibility = ["//visibility:public"])
 
 # Generate version.h from version.h.in
