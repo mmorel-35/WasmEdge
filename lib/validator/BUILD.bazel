@@ -12,9 +12,8 @@ cc_library(
         "formchecker.cpp",
         "validator.cpp",
     ],
-    hdrs = glob(["../../include/validator/*.h"]),
-    includes = ["../../include"],
     deps = [
+        "//include:headers",
         "//lib/common",
     ],
 )

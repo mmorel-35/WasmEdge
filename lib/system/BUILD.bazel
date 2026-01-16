@@ -14,13 +14,12 @@ cc_library(
         "path.cpp",
         "stacktrace.cpp",
     ],
-    hdrs = glob(["../../include/system/*.h"]),
-    includes = ["../../include"],
     linkopts = select({
         "@platforms//os:windows": ["-ldbghelp"],
         "//conditions:default": [],
     }),
     deps = [
+        "//include:headers",
         "//lib/common",
     ],
 )

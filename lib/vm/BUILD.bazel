@@ -8,12 +8,11 @@ package(default_visibility = ["//visibility:public"])
 cc_library(
     name = "vm",
     srcs = ["vm.cpp"],
-    hdrs = glob(["../../include/vm/*.h"]),
-    includes = ["../../include"],
     deps = [
+        "//include:headers",
         "//lib/common",
         "//lib/executor",
-        "//lib/host/wasi",
+        "//lib/host/wasi:host_wasi",
         "//lib/loader",
         "//lib/plugin",
         "//lib/system",

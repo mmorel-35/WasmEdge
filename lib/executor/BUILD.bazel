@@ -14,12 +14,8 @@ cc_library(
         "executor.cpp",
         "helper.cpp",
     ]),
-    hdrs = glob([
-        "../../include/executor/*.h",
-        "../../include/runtime/*.h",
-    ]),
-    includes = ["../../include"],
     deps = [
+        "//include:headers",
         "//lib/common",
         "//lib/system",
     ],

@@ -31,9 +31,7 @@ cc_library(
             "inode-linux.cpp",
         ],
     }),
-    hdrs = glob(["../../../include/host/wasi/*.h"]),
     includes = [
-        "../../../include",
         "../../../thirdparty",
     ],
     linkopts = select({
@@ -49,6 +47,7 @@ cc_library(
         "//conditions:default": ["-lrt"],
     }),
     deps = [
+        "//include:headers",
         "//lib/system",
     ],
 )

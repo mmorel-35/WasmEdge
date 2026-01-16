@@ -14,9 +14,8 @@ cc_library(
         "runtimeTool.cpp",
         "uniTool.cpp",
     ],
-    hdrs = glob(["../../include/driver/*.h"]),
-    includes = ["../../include"],
     deps = [
+        "//include:headers",
         "//lib/vm",
     ],
 )

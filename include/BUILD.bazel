@@ -5,16 +5,50 @@
 
 package(default_visibility = ["//visibility:public"])
 
+# Generate version.h from version.h.in
+genrule(
+    name = "generate_version_h",
+    srcs = ["common/version.h.in"],
+    outs = ["common/version.h"],
+    cmd = """
+    sed -e 's|@CPACK_PACKAGE_VERSION@|0.14.0|g' \
+        -e 's|@CMAKE_INSTALL_FULL_LIBDIR@|/usr/local/lib|g' \
+        -e 's|#cmakedefine|#define|g' \
+        -e 's|$${WASMEDGE_API_VERSION}|1|g' \
+        $< > $@
+    """,
+)
+
+# Generate config.h from config.h.in
+genrule(
+    name = "generate_config_h",
+    srcs = ["common/config.h.in"],
+    outs = ["common/config.h"],
+    cmd = """
+    sed -e 's|@CMAKE_INSTALL_FULL_LOCALSTATEDIR@|/var/lib|g' \
+        -e 's|#cmakedefine HAVE_MMAP.*|#define HAVE_MMAP 1|g' \
+        -e 's|#cmakedefine HAVE_PWD_H.*|#define HAVE_PWD_H 1|g' \
+        -e 's|#cmakedefine CMAKE_INSTALL_FULL_LOCALSTATEDIR.*|#define CMAKE_INSTALL_FULL_LOCALSTATEDIR "/var/lib"|g' \
+        $< > $@
+    """,
+)
+
 # All WasmEdge headers
 cc_library(
     name = "headers",
-    hdrs = glob(["**/*.h", "**/*.hpp", "**/*.inc"], exclude=["api/wasmedge/version.h.in", "common/version.h.in", "common/config.h.in"]),
+    hdrs = glob(["**/*.h", "**/*.hpp", "**/*.inc"], exclude=["api/wasmedge/version.h.in", "common/version.h.in", "common/config.h.in"]) + [
+        ":generate_version_h",
+        ":generate_config_h",
+    ],
     strip_include_prefix = ".",
 )
 
 # Common headers specifically
 cc_library(
     name = "common_headers",
-    hdrs = glob(["common/**/*.h", "common/**/*.hpp", "common/**/*.inc", "experimental/**/*.hpp"]),
+    hdrs = glob(["common/**/*.h", "common/**/*.hpp", "common/**/*.inc", "experimental/**/*.hpp"], exclude=["common/version.h.in", "common/config.h.in"]) + [
+        ":generate_version_h",
+        ":generate_config_h",
+    ],
     strip_include_prefix = ".",
 )

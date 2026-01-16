@@ -12,13 +12,12 @@ cc_library(
         "filemgr.cpp",
         "shared_library.cpp",
     ],
-    hdrs = glob(["../../include/loader/*.h"]),
-    includes = ["../../include"],
     linkopts = select({
         "@platforms//os:windows": [],
         "//conditions:default": ["-ldl"],
     }),
     deps = [
+        "//include:headers",
         "//lib/common",
         "//lib/system",
     ],
@@ -31,13 +30,9 @@ cc_library(
         "serialize/**/*.cpp",
         "loader.cpp",
     ]),
-    hdrs = glob([
-        "../../include/ast/**/*.h",
-        "../../include/loader/**/*.h",
-    ]),
-    includes = ["../../include"],
     deps = [
         ":loader_filemgr",
+        "//include:headers",
         "//lib/common",
     ],
 )
