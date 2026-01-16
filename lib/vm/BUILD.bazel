@@ -1,0 +1,22 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2019-2026 Second State INC
+
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "vm",
+    srcs = ["vm.cpp"],
+    hdrs = glob(["../../include/vm/*.h"]),
+    includes = ["../../include"],
+    deps = [
+        "//lib/common",
+        "//lib/executor",
+        "//lib/host/wasi",
+        "//lib/loader",
+        "//lib/plugin",
+        "//lib/system",
+        "//lib/validator",
+    ],
+)

@@ -1,0 +1,53 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2019-2026 Second State INC
+
+# WasmEdge LLVM library for AOT compilation
+# This library is only needed when AOT compilation is enabled.
+
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+package(default_visibility = ["//visibility:public"])
+
+# Check if AOT is enabled via config_setting
+config_setting(
+    name = "aot_enabled",
+    define_values = {
+        "enable_aot": "true",
+    },
+)
+
+cc_library(
+    name = "llvm",
+    srcs = select({
+        ":aot_enabled": [
+            "compiler.cpp",
+            "codegen.cpp",
+            "data.cpp",
+            "jit.cpp",
+        ],
+        "//conditions:default": [],
+    }),
+    hdrs = select({
+        ":aot_enabled": [
+            "data.h",
+            "llvm.h",
+        ],
+        "//conditions:default": [],
+    }),
+    deps = select({
+        ":aot_enabled": [
+            "//lib/common",
+            "//lib/system",
+            "@llvm-raw//:llvm",
+            "@llvm-raw//:lld",
+        ],
+        "//conditions:default": [],
+    }),
+    includes = ["."],
+    copts = select({
+        ":aot_enabled": [
+            "-DWASMEDGE_ENABLE_AOT",
+        ],
+        "//conditions:default": [],
+    }),
+)

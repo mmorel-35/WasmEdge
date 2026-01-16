@@ -1,0 +1,35 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2019-2026 Second State INC
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "blake3",
+    srcs = [
+        "blake3.c",
+        "blake3_dispatch.c",
+        "blake3_portable.c",
+    ] + select({
+        "@platforms//cpu:x86_64": [
+            "blake3_avx2.c",
+            "blake3_avx512.c",
+            "blake3_sse2.c",
+            "blake3_sse41.c",
+        ],
+        "@platforms//cpu:aarch64": [
+            "blake3_neon.c",
+        ],
+        "//conditions:default": [],
+    }),
+    hdrs = [
+        "blake3.h",
+        "blake3_impl.h",
+    ],
+    copts = select({
+        "@platforms//cpu:x86_64": [
+            "-msse2",
+            "-msse4.1",
+        ],
+        "//conditions:default": [],
+    }),
+)

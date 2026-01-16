@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2019-2026 Second State INC
+
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "plugin",
+    srcs = ["plugin.cpp"],
+    hdrs = glob([
+        "../../include/plugin/*.h",
+        "../../include/api/wasmedge/*.h",
+    ]),
+    includes = [
+        "../../include",
+        "../../include/api",
+    ],
+    deps = [
+        "//lib/common",
+        "//lib/loader:loader_filemgr",
+        "//lib/plugin/wasi_logging",
+        "//lib/po",
+    ],
+)

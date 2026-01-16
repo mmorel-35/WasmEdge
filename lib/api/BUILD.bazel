@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2019-2026 Second State INC
+
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "api",
+    srcs = ["wasmedge.cpp"],
+    hdrs = glob(["../../include/api/wasmedge/*.h"]),
+    includes = [
+        "../../include",
+        "../../include/api",
+    ],
+    deps = [
+        "//lib/driver",
+        "//lib/vm",
+    ],
+)
+
+# Shared library target
+cc_shared_library(
+    name = "libwasmedge",
+    deps = [":api"],
+)

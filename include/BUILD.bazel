@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2019-2026 Second State INC
+
+# Header-only libraries for WasmEdge include files
+
+package(default_visibility = ["//visibility:public"])
+
+# All WasmEdge headers
+cc_library(
+    name = "headers",
+    hdrs = glob(["**/*.h", "**/*.hpp", "**/*.inc"], exclude=["api/wasmedge/version.h.in", "common/version.h.in", "common/config.h.in"]),
+    strip_include_prefix = ".",
+)
+
+# Common headers specifically
+cc_library(
+    name = "common_headers",
+    hdrs = glob(["common/**/*.h", "common/**/*.hpp", "common/**/*.inc", "experimental/**/*.hpp"]),
+    strip_include_prefix = ".",
+)
