@@ -8,8 +8,8 @@ package(default_visibility = ["//visibility:public"])
 cc_library(
     name = "po",
     srcs = ["argument_parser.cpp"],
-    hdrs = glob(["//include/po/*.h"]),
-    includes = ["//include"],
+    hdrs = glob(["../../include/po/*.h"]),
+    includes = ["../../include"],
     deps = [
         "//lib/common",
     ],

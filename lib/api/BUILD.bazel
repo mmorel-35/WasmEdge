@@ -8,10 +8,10 @@ package(default_visibility = ["//visibility:public"])
 cc_library(
     name = "api",
     srcs = ["wasmedge.cpp"],
-    hdrs = glob(["//include/api/wasmedge/*.h"]),
+    hdrs = glob(["../../include/api/wasmedge/*.h"]),
     includes = [
-        "//include",
-        "//include/api",
+        "../../include",
+        "../../include/api",
     ],
     deps = [
         "//lib/driver",

@@ -12,8 +12,8 @@ cc_library(
         "filemgr.cpp",
         "shared_library.cpp",
     ],
-    hdrs = glob(["//include/loader/*.h"]),
-    includes = ["//include"],
+    hdrs = glob(["../../include/loader/*.h"]),
+    includes = ["../../include"],
     linkopts = select({
         "@platforms//os:windows": [],
         "//conditions:default": ["-ldl"],
@@ -32,10 +32,10 @@ cc_library(
         "loader.cpp",
     ]),
     hdrs = glob([
-        "//include/ast/**/*.h",
-        "//include/loader/**/*.h",
+        "../../include/ast/**/*.h",
+        "../../include/loader/**/*.h",
     ]),
-    includes = ["//include"],
+    includes = ["../../include"],
     deps = [
         ":loader_filemgr",
         "//lib/common",

@@ -14,11 +14,11 @@ cc_library(
         "spdlog.cpp",
     ],
     hdrs = glob([
-        "//include/common/*.h",
-        "//include/common/*.hpp",
+        "../../include/common/*.h",
+        "../../include/common/*.hpp",
     ]),
     includes = [
-        "//include",
+        "../../include",
     ],
     deps = [
         "@spdlog",

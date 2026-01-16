@@ -31,10 +31,10 @@ cc_library(
             "inode-linux.cpp",
         ],
     }),
-    hdrs = glob(["//include/host/wasi/*.h"]),
+    hdrs = glob(["../../../include/host/wasi/*.h"]),
     includes = [
-        "//include",
-        "//thirdparty",
+        "../../../include",
+        "../../../thirdparty",
     ],
     linkopts = select({
         "@platforms//os:macos": [],

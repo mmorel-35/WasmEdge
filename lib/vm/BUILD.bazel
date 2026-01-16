@@ -8,8 +8,8 @@ package(default_visibility = ["//visibility:public"])
 cc_library(
     name = "vm",
     srcs = ["vm.cpp"],
-    hdrs = glob(["//include/vm/*.h"]),
-    includes = ["//include"],
+    hdrs = glob(["../../include/vm/*.h"]),
+    includes = ["../../include"],
     deps = [
         "//lib/common",
         "//lib/executor",

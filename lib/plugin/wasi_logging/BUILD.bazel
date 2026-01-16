@@ -11,8 +11,8 @@ cc_library(
         "func.cpp",
         "module.cpp",
     ],
-    hdrs = glob(["//include/plugin/wasi_logging/*.h"]),
-    includes = ["//include"],
+    hdrs = glob(["../../../include/plugin/wasi_logging/*.h"]),
+    includes = ["../../../include"],
     deps = [
         "//lib/common",
     ],

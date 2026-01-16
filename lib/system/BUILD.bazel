@@ -14,8 +14,8 @@ cc_library(
         "path.cpp",
         "stacktrace.cpp",
     ],
-    hdrs = glob(["//include/system/*.h"]),
-    includes = ["//include"],
+    hdrs = glob(["../../include/system/*.h"]),
+    includes = ["../../include"],
     linkopts = select({
         "@platforms//os:windows": ["-ldbghelp"],
         "//conditions:default": [],
