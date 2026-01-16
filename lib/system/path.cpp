@@ -23,7 +23,7 @@ std::filesystem::path Path::home() noexcept {
 #if defined(HAVE_PWD_H)
   {
     const struct passwd *PassWd = getpwuid(getuid());
-    Home = std::filesystem::u8path(PassWd->pw_dir);
+    Home = std::filesystem::path(PassWd->pw_dir);
   }
 #elif WASMEDGE_OS_WINDOWS
   {
@@ -48,7 +48,7 @@ std::filesystem::path Path::home() noexcept {
   }
 #endif
   if (!Home.empty()) {
-    return Home / std::filesystem::u8path(".wasmedge"sv);
+    return Home / std::filesystem::path(".wasmedge");
   }
   return {};
 }

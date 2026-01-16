@@ -249,11 +249,11 @@ std::vector<std::filesystem::path> Plugin::getDefaultPluginPaths() noexcept {
     std::string_view ExtraEnvStr = ExtraEnv;
     for (auto Sep = ExtraEnvStr.find(':'); Sep != std::string_view::npos;
          Sep = ExtraEnvStr.find(':')) {
-      Result.push_back(std::filesystem::u8path(ExtraEnvStr.substr(0, Sep)));
+      Result.push_back(std::filesystem::path(ExtraEnvStr.substr(0, Sep)));
       const auto Next = ExtraEnvStr.find_first_not_of(':', Sep);
       ExtraEnvStr = ExtraEnvStr.substr(Next);
     }
-    Result.push_back(std::filesystem::u8path(ExtraEnvStr));
+    Result.push_back(std::filesystem::path(ExtraEnvStr));
   }
 
   // Plugin directory for the WasmEdge installation.
@@ -268,7 +268,7 @@ std::vector<std::filesystem::path> Plugin::getDefaultPluginPaths() noexcept {
           "within the object. dli_fname is null."sv);
       return std::vector<std::filesystem::path>();
     }
-    auto LibPath = std::filesystem::u8path(DLInfo.dli_fname)
+    auto LibPath = std::filesystem::path(DLInfo.dli_fname)
                        .parent_path()
                        .lexically_normal();
     const auto UsrStr = "/usr"sv;
@@ -282,12 +282,12 @@ std::vector<std::filesystem::path> Plugin::getDefaultPluginPaths() noexcept {
       // Plug-in path will be in "LIB_PATH/wasmedge".
       // If the installation path is under "/usr/lib" or "/usr/lib64", the
       // traced library path will be "/lib" or "/lib64".
-      Result.push_back(LibPath / std::filesystem::u8path("wasmedge"sv));
+      Result.push_back(LibPath / std::filesystem::path("wasmedge"));
     } else {
       // The installation path of the WasmEdge library is not under "/usr", such
       // as "$HOME/.wasmedge". Plug-in path will be in "LIB_PATH/../plugin".
-      Result.push_back(LibPath / std::filesystem::u8path(".."sv) /
-                       std::filesystem::u8path("plugin"sv));
+      Result.push_back(LibPath / std::filesystem::path("..") /
+                       std::filesystem::path("plugin"));
     }
   } else {
     spdlog::error(ErrCode::Value::NonNullRequired);
