@@ -1,103 +1,56 @@
-# WasmEdge Bazel Workspace Implementation Summary
+# WasmEdge Bazel Workspace
 
-This document summarizes the Bazel workspace setup for the WasmEdge project.
+This document provides technical details about the Bazel workspace implementation.
 
 ## Overview
 
-The WasmEdge project has been successfully converted into a Bazel workspace, enabling hermetic and reproducible builds. This implementation was inspired by the approach used in [proxy-wasm-cpp-host](https://github.com/proxy-wasm/proxy-wasm-cpp-host), which also uses WasmEdge as a dependency.
+WasmEdge now supports Bazel builds alongside CMake. The implementation follows patterns from [proxy-wasm-cpp-host](https://github.com/proxy-wasm/proxy-wasm-cpp-host).
 
-## What Was Done
+## File Structure
 
-### 1. Core Workspace Configuration
-
-**Files Created:**
-- `WORKSPACE` - Main workspace file that loads repositories and dependencies
-- `.bazelrc` - Build configuration with optimized settings
-- `.bazelversion` - Specifies Bazel 6.5.0 as the required version
-- `.bazelignore` - Excludes non-relevant directories from Bazel scanning
+- `WORKSPACE` - Main workspace file
+- `.bazelrc` - Build configuration
+- `.bazelversion` - Specifies Bazel 6.5.0
 - `BUILD.bazel` - Root build file
+- `bazel/repositories.bzl` - External dependencies
+- `bazel/dependencies.bzl` - Dependency setup
+- `lib/*/BUILD.bazel` - Library component builds
+- `tools/*/BUILD.bazel` - Tool builds
 
-### 2. Bazel Infrastructure (`bazel/` directory)
+## Key Features
 
-**Files Created:**
-- `bazel/repositories.bzl` - Defines external dependencies (Bazel Skylib, rules_cc, fmt, spdlog, simdjson, GoogleTest)
-- `bazel/dependencies.bzl` - Loads and configures dependencies
-- `bazel/external/fmt.BUILD` - Build rules for the fmt library
-- `bazel/external/spdlog.BUILD` - Build rules for the spdlog library
-- `bazel/external/simdjson.BUILD` - Build rules for the simdjson library
-
-### 3. Library Component BUILD Files
-
-Build files created for all major library components:
-
-- `lib/common/BUILD.bazel` - Common utilities (errinfo, hash, hexstr, spdlog)
-- `lib/system/BUILD.bazel` - System abstractions (allocator, fault, mmap, path, stacktrace)
-- `lib/po/BUILD.bazel` - Program options parsing
-- `lib/loader/BUILD.bazel` - WebAssembly module loading (includes AST and serialization)
-- `lib/validator/BUILD.bazel` - WebAssembly validation
-- `lib/executor/BUILD.bazel` - WebAssembly execution engine
-- `lib/host/wasi/BUILD.bazel` - WASI host implementation with platform-specific sources
-- `lib/plugin/BUILD.bazel` - Plugin system
-- `lib/plugin/wasi_logging/BUILD.bazel` - WASI logging plugin
-- `lib/vm/BUILD.bazel` - Virtual machine orchestration
-- `lib/driver/BUILD.bazel` - Driver tools (compiler, runtime, fuzzer)
-- `lib/api/BUILD.bazel` - C API wrapper (libwasmedge)
-
-### 4. Third-Party Dependencies
-
-- `thirdparty/blake3/BUILD.bazel` - BLAKE3 hashing library with platform-specific SIMD optimizations
-
-### 5. Tools
-
-- `tools/wasmedge/BUILD.bazel` - WasmEdge runtime and compiler executables
-
-### 6. Documentation and Examples
-
-- `docs/BUILD_WITH_BAZEL.md` - Comprehensive guide for building with Bazel
-- `examples/bazel_example/` - Complete example showing how to use WasmEdge as a Bazel dependency
-  - Includes WORKSPACE, BUILD.bazel, main.cpp, and README.md
-
-### 7. Updates to Existing Files
-
-- `README.md` - Added Bazel build link in quick start guides
-- `.gitignore` - Added patterns to ignore Bazel build artifacts
-
-## Architecture Decisions
-
-### Modular Structure
-
-The build is organized into separate library targets that mirror the CMake structure:
-- Each major component is a separate `cc_library` target
-- Dependencies are explicitly declared
-- Header files are exposed through `hdrs` and `includes`
-
-### Platform Support
-
-Platform-specific code is handled using Bazel's `select()` statements:
-- Different source files for Linux, macOS, and Windows (WASI implementation)
-- Platform-specific linker flags
-- Architecture-specific optimizations (x86_64 vs ARM64 for BLAKE3)
-
-### External Dependencies
-
-External dependencies are fetched via `http_archive`:
-- Versions are pinned for reproducibility
-- SHA256 checksums ensure integrity
-- Custom BUILD files are provided where needed
-
-### Hermetic Builds
-
-The setup follows Bazel best practices:
-- All dependencies are explicitly declared
-- No reliance on system packages
-- Reproducible builds across platforms
+- **Hermetic builds**: All dependencies are explicit and versioned
+- **Platform support**: Linux, macOS, Windows via `select()` statements
+- **External dependencies**: fmt, spdlog, simdjson via `http_archive`
+- **CI validation**: GitHub Actions workflow for automated testing
 
 ## Build Targets
 
-### Libraries
-
 ```bash
-# Build the C API library
+# Library
+bazel build //lib/api
+
+# Tools
+bazel build //tools/wasmedge:wasmedge
+bazel build //tools/wasmedge:wasmedgec
+
+# Everything
+bazel build //...
+```
+
+## Not Included
+
+The following are not yet part of the Bazel build and can be added incrementally:
+- LLVM AOT compilation
+- WASI NN RPC server
+- Fuzzing targets
+- Test infrastructure
+
+## References
+
+- [Bazel Documentation](https://bazel.build/docs)
+- [proxy-wasm-cpp-host](https://github.com/proxy-wasm/proxy-wasm-cpp-host)
+
 bazel build //lib/api:api
 
 # Build individual components

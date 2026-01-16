@@ -57,8 +57,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Bazelisk
-        uses: bazelbuild/setup-bazelisk@b39c379c82683a5f25d34f0d062761f62693e0b2 # v3.0.0
+      - name: Set up Bazel
+        uses: bazel-contrib/setup-bazel@e403ad507104847c3539436f64a9e9eecc73eeec # v0.10.0
+        with:
+          bazelisk-cache: true
 
       - name: Cache Bazel
         uses: actions/cache@5a3e3c8c22e0bf8f74906c8b2c6c6e18c47e5b2e # v4.2.0
@@ -119,8 +121,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Bazelisk
-        uses: bazelbuild/setup-bazelisk@b39c379c82683a5f25d34f0d062761f62693e0b2 # v3.0.0
+      - name: Set up Bazel
+        uses: bazel-contrib/setup-bazel@e403ad507104847c3539436f64a9e9eecc73eeec # v0.10.0
+        with:
+          bazelisk-cache: true
 
       - name: Cache Bazel
         uses: actions/cache@5a3e3c8c22e0bf8f74906c8b2c6c6e18c47e5b2e # v4.2.0
@@ -154,8 +158,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Bazelisk
-        uses: bazelbuild/setup-bazelisk@b39c379c82683a5f25d34f0d062761f62693e0b2 # v3.0.0
+      - name: Set up Bazel
+        uses: bazel-contrib/setup-bazel@e403ad507104847c3539436f64a9e9eecc73eeec # v0.10.0
+        with:
+          bazelisk-cache: true
 
       - name: Query all targets
         run: |
