@@ -65,3 +65,14 @@ def wasmedge_repositories():
         strip_prefix = "googletest-1.15.2",
         urls = ["https://github.com/google/googletest/archive/refs/tags/v1.15.2.tar.gz"],
     )
+
+    # LLVM for AOT compilation (optional)
+    # Note: This is a large download. Only needed if AOT compilation is enabled.
+    maybe(
+        http_archive,
+        name = "llvm-raw",
+        build_file = "@wasmedge//bazel/external:llvm.BUILD",
+        sha256 = "a7b8c0c2f5ecbfaf3eb615d54f93c53ad9dbe776e5d55cd7b8d7e25b85e41fd7",
+        strip_prefix = "llvm-project-llvmorg-18.1.8",
+        urls = ["https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-18.1.8.tar.gz"],
+    )

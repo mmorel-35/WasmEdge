@@ -36,3 +36,11 @@ build --verbose_failures
 
 # Keep going on test failures
 test --keep_going
+
+# AOT compilation with LLVM (disabled by default)
+# To enable: bazel build --config=aot //...
+build:aot --define=enable_aot=true
+build:aot --copt=-DWASMEDGE_ENABLE_AOT
+
+# Without AOT (default)
+build --define=enable_aot=false

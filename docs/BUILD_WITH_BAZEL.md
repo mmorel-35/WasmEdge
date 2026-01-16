@@ -22,7 +22,30 @@ bazel build --config=release //...
 
 # Debug build
 bazel build --config=debug //...
+
+# With AOT compilation support (requires LLVM)
+bazel build --config=aot //...
 ```
+
+## AOT (Ahead-of-Time) Compilation
+
+WasmEdge supports AOT compilation using LLVM. To enable it:
+
+```bash
+# Build with AOT support
+bazel build --config=aot //...
+
+# Build specific targets with AOT
+bazel build --config=aot //lib/api
+bazel build --config=aot //tools/wasmedge:wasmedge
+```
+
+**Note**: Building with AOT support requires downloading and building LLVM, which is a large dependency (>1GB download). The initial build may take significant time and resources.
+
+For production use with AOT, consider:
+- Using system-installed LLVM libraries
+- Using pre-built LLVM binaries
+- Configuring Bazel to use a local LLVM installation
 
 ## Using WasmEdge in Your Bazel Project
 

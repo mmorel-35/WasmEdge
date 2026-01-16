@@ -1,0 +1,43 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2019-2024 Second State INC
+
+# WasmEdge AOT (Ahead-of-Time) compilation library
+# This library is only needed when AOT compilation is enabled.
+
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+package(default_visibility = ["//visibility:public"])
+
+# Check if AOT is enabled via config_setting
+config_setting(
+    name = "aot_enabled",
+    define_values = {
+        "enable_aot": "true",
+    },
+)
+
+cc_library(
+    name = "aot",
+    srcs = select({
+        ":aot_enabled": [
+            "blake3.cpp",
+            "cache.cpp",
+        ],
+        "//conditions:default": [],
+    }),
+    deps = select({
+        ":aot_enabled": [
+            "//lib/common",
+            "//lib/llvm",
+            "//thirdparty/blake3",
+        ],
+        "//conditions:default": [],
+    }),
+    includes = ["."],
+    copts = select({
+        ":aot_enabled": [
+            "-DWASMEDGE_ENABLE_AOT",
+        ],
+        "//conditions:default": [],
+    }),
+)
