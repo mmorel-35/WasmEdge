@@ -1,5 +1,8 @@
 # SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: 2019-2024 Second State INC
+# SPDX-FileCopyrightText: 2019-2026 Second State INC
+
+# Enable Bzlmod (modern module system)
+common --enable_bzlmod
 
 # Build with C++20
 build --cxxopt=-std=c++20

@@ -3,10 +3,10 @@
 
 workspace(name = "wasmedge")
 
-load("@wasmedge//bazel:repositories.bzl", "wasmedge_repositories")
+load("//:bazel/repositories.bzl", "wasmedge_repositories")
 
 wasmedge_repositories()
 
-load("@wasmedge//bazel:dependencies.bzl", "wasmedge_dependencies")
+load("//:bazel/dependencies.bzl", "wasmedge_dependencies")
 
 wasmedge_dependencies()

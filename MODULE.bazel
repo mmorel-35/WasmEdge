@@ -22,25 +22,12 @@ bazel_dep(name = "rules_cc", version = "0.0.9")
 # External dependencies from Bazel Central Registry
 bazel_dep(name = "fmt", version = "11.0.2")
 bazel_dep(name = "spdlog", version = "1.14.1")
-bazel_dep(name = "googletest", version = "1.15.2")
 
-# simdjson - not in BCR, use http_archive
-http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+# Development dependencies
+bazel_dep(name = "googletest", version = "1.15.2", dev_dependency = True)
 
-http_archive(
-    name = "simdjson",
-    build_file = "@wasmedge//bazel/external:simdjson.BUILD",
-    sha256 = "828450c0de03ee0e35c2ae0402b4ced75640cf0dc5a243e2a0414cba19c84c0f",
-    strip_prefix = "simdjson-3.6.0",
-    urls = ["https://github.com/simdjson/simdjson/archive/refs/tags/v3.6.0.tar.gz"],
-)
+# LLVM for AOT compilation (optional - dev dependency)
+# Only needed when AOT compilation is enabled via --config=aot
+bazel_dep(name = "llvm-project", version = "17.0.3.bcr.4", dev_dependency = True, repo_name = "llvm-raw")
 
-# LLVM for AOT compilation (optional - large dependency)
-# Note: This is only needed if AOT compilation is enabled via --config=aot
-http_archive(
-    name = "llvm-raw",
-    build_file = "@wasmedge//bazel/external:llvm.BUILD",
-    sha256 = "a7b8c0c2f5ecbfaf3eb615d54f93c53ad9dbe776e5d55cd7b8d7e25b85e41fd7",
-    strip_prefix = "llvm-project-llvmorg-18.1.8",
-    urls = ["https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-18.1.8.tar.gz"],
-)
+# Note: simdjson is not in BCR, defined in WORKSPACE for compatibility

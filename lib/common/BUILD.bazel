@@ -13,14 +13,9 @@ cc_library(
         "hexstr.cpp",
         "spdlog.cpp",
     ],
-    hdrs = glob([
-        "../../include/common/*.h",
-        "../../include/common/*.hpp",
-    ]),
-    includes = [
-        "../../include",
-    ],
     deps = [
+        "//include:common_headers",
         "@spdlog",
     ],
 )
+
