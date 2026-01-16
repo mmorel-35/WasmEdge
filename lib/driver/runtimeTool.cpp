@@ -446,7 +446,7 @@ int Tool(struct DriverToolOptions &Opt) noexcept {
   WasiMod->init(Opt.Dir.value(),
                 InputPath.filename()
                     .replace_extension(std::filesystem::u8path("wasm"sv))
-                    .u8string(),
+                    .string(),
                 Opt.Args.value(), Opt.Env.value());
 
   if (EnterCommandMode) {

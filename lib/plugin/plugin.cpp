@@ -345,13 +345,13 @@ WASMEDGE_EXPORT bool Plugin::load(const std::filesystem::path &Path) noexcept {
                Error)) {
         const auto &EntryPath = Entry.path();
         if (Entry.is_regular_file(Error) &&
-            EntryPath.extension().u8string() == WASMEDGE_LIB_EXTENSION) {
+            EntryPath.extension().string() == WASMEDGE_LIB_EXTENSION) {
           Result |= loadFile(EntryPath);
         }
       }
       return Result;
     } else if (std::filesystem::is_regular_file(Status) &&
-               Path.extension().u8string() == WASMEDGE_LIB_EXTENSION) {
+               Path.extension().string() == WASMEDGE_LIB_EXTENSION) {
       return loadFile(Path);
     }
   }
