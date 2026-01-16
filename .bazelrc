@@ -4,9 +4,14 @@
 # Enable Bzlmod (modern module system)
 common --enable_bzlmod
 
-# Build with C++20
+# Build with C++20 (required for WasmEdge)
 build --cxxopt=-std=c++20
 build --host_cxxopt=-std=c++20
+build --repo_env=BAZEL_CXXOPTS=-std=c++20
+
+# Set C++ standard via toolchain
+build --copt=-std=c++20
+build --host_copt=-std=c++20
 
 # Enable optimization for release builds
 build:release --compilation_mode=opt
