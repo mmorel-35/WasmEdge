@@ -1,0 +1,33 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2019-2026 Second State INC
+
+"""WasmEdge Bazel Module
+
+This module provides Bazel build support for WasmEdge, a lightweight,
+high-performance WebAssembly runtime.
+
+For more information, see https://wasmedge.org
+"""
+
+module(
+    name = "wasmedge",
+    version = "0.14.0",
+    compatibility_level = 1,
+)
+
+# Bazel dependencies
+bazel_dep(name = "bazel_skylib", version = "1.7.1")
+bazel_dep(name = "rules_cc", version = "0.0.9")
+
+# External dependencies from Bazel Central Registry
+bazel_dep(name = "fmt", version = "11.0.2")
+bazel_dep(name = "spdlog", version = "1.14.1")
+
+# Development dependencies
+bazel_dep(name = "googletest", version = "1.15.2", dev_dependency = True)
+
+# LLVM for AOT compilation (optional - dev dependency)
+# Only needed when AOT compilation is enabled via --config=aot
+bazel_dep(name = "llvm-project", version = "17.0.3.bcr.4", dev_dependency = True, repo_name = "llvm-raw")
+
+# Note: simdjson is not in BCR, defined in WORKSPACE for compatibility

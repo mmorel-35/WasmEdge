@@ -26,6 +26,14 @@
 # Nix's output
 result
 
+# Bazel build artifacts
+bazel-*
+.bazel
+/bazel-bin
+/bazel-out
+/bazel-testlogs
+/bazel-wasmedge
+
 #==============================================================================#
 # Explicit files to ignore (only matches one).
 #==============================================================================#

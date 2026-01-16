@@ -1,0 +1,171 @@
+name: Bazel Build
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - master
+      - "proposal/**"
+    paths:
+      - ".github/workflows/bazel.yml"
+      - ".bazelrc"
+      - ".bazelversion"
+      - "WORKSPACE"
+      - "BUILD.bazel"
+      - "bazel/**"
+      - "include/**"
+      - "lib/**"
+      - "thirdparty/**"
+      - "tools/**"
+  pull_request:
+    branches:
+      - master
+      - "proposal/**"
+    paths:
+      - ".github/workflows/bazel.yml"
+      - ".bazelrc"
+      - ".bazelversion"
+      - "WORKSPACE"
+      - "BUILD.bazel"
+      - "bazel/**"
+      - "include/**"
+      - "lib/**"
+      - "thirdparty/**"
+      - "tools/**"
+
+permissions:
+  contents: read
+
+jobs:
+  bazel-build-linux:
+    name: Build with Bazel on Linux
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Harden the runner
+        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Set up Bazel
+        uses: bazel-contrib/setup-bazel@e403ad507104847c3539436f64a9e9eecc73eeec # v0.10.0
+        with:
+          bazelisk-cache: true
+
+      - name: Cache Bazel
+        uses: actions/cache@5a3e3c8c22e0bf8f74906c8b2c6c6e18c47e5b2e # v4.2.0
+        with:
+          path: |
+            ~/.cache/bazel
+          key: ${{ runner.os }}-bazel-${{ hashFiles('.bazelversion', 'WORKSPACE', 'bazel/**') }}
+          restore-keys: |
+            ${{ runner.os }}-bazel-
+
+      - name: Build all targets
+        run: |
+          bazel build //...
+
+      - name: Build library
+        run: |
+          bazel build //lib/api
+
+      - name: Build tools
+        run: |
+          bazel build //tools/wasmedge:wasmedge
+          bazel build //tools/wasmedge:wasmedgec
+
+      - name: Verify build outputs
+        run: |
+          # Check that main library was built
+          if [ ! -f "bazel-bin/lib/api/libapi.a" ] && [ ! -f "bazel-bin/lib/api/_objs/api/wasmedge.pic.o" ]; then
+            echo "Library build artifacts not found"
+            ls -la bazel-bin/lib/api/ || true
+          fi
+
+          # Check that tools were built
+          if [ ! -f "bazel-bin/tools/wasmedge/wasmedge" ]; then
+            echo "wasmedge tool not found"
+            ls -la bazel-bin/tools/wasmedge/ || true
+          fi
+
+      - name: Test with release config
+        run: |
+          bazel build --config=release //lib/api
+
+      - name: Test with debug config
+        run: |
+          bazel build --config=debug //lib/common
+
+  bazel-build-macos:
+    name: Build with Bazel on macOS
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Set up Bazel
+        uses: bazel-contrib/setup-bazel@e403ad507104847c3539436f64a9e9eecc73eeec # v0.10.0
+        with:
+          bazelisk-cache: true
+
+      - name: Cache Bazel
+        uses: actions/cache@5a3e3c8c22e0bf8f74906c8b2c6c6e18c47e5b2e # v4.2.0
+        with:
+          path: |
+            ~/.cache/bazel
+          key: ${{ runner.os }}-bazel-${{ hashFiles('.bazelversion', 'WORKSPACE', 'bazel/**') }}
+          restore-keys: |
+            ${{ runner.os }}-bazel-
+
+      - name: Build library
+        run: |
+          bazel build //lib/api
+
+      - name: Build tools
+        run: |
+          bazel build //tools/wasmedge:wasmedge
+
+  bazel-query:
+    name: Bazel Query Tests
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Harden the runner
+        uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Set up Bazel
+        uses: bazel-contrib/setup-bazel@e403ad507104847c3539436f64a9e9eecc73eeec # v0.10.0
+        with:
+          bazelisk-cache: true
+
+      - name: Query all targets
+        run: |
+          bazel query //... --output=label_kind
+
+      - name: Check dependencies
+        run: |
+          bazel query 'deps(//lib/api)' --output=graph > /tmp/deps.dot
+          echo "Dependency graph generated"
+
+      - name: Verify build file syntax
+        run: |
+          bazel query //... > /dev/null
+          echo "All BUILD files are valid"

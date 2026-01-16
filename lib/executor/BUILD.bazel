@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2019-2026 Second State INC
+
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "executor",
+    srcs = glob([
+        "instantiate/**/*.cpp",
+        "engine/**/*.cpp",
+        "coredump.cpp",
+        "executor.cpp",
+        "helper.cpp",
+    ]),
+    hdrs = glob([
+        "../../include/executor/*.h",
+        "../../include/runtime/*.h",
+    ]),
+    includes = ["../../include"],
+    deps = [
+        "//lib/common",
+        "//lib/system",
+    ],
+)

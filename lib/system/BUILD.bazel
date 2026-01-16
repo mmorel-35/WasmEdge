@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2019-2026 Second State INC
+
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "system",
+    srcs = [
+        "allocator.cpp",
+        "fault.cpp",
+        "mmap.cpp",
+        "path.cpp",
+        "stacktrace.cpp",
+    ],
+    hdrs = glob(["../../include/system/*.h"]),
+    includes = ["../../include"],
+    linkopts = select({
+        "@platforms//os:windows": ["-ldbghelp"],
+        "//conditions:default": [],
+    }),
+    deps = [
+        "//lib/common",
+    ],
+)
