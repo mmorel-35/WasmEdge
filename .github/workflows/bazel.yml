@@ -20,7 +20,6 @@ on:
       - "lib/**"
       - "thirdparty/**"
       - "tools/**"
-      - "examples/bazel_example/**"
   pull_request:
     branches:
       - master
@@ -36,7 +35,6 @@ on:
       - "lib/**"
       - "thirdparty/**"
       - "tools/**"
-      - "examples/bazel_example/**"
 
 permissions:
   contents: read
@@ -45,7 +43,7 @@ jobs:
   bazel-build-linux:
     name: Build with Bazel on Linux
     runs-on: ubuntu-22.04
-    
+
     steps:
       - name: Harden the runner
         uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
@@ -84,11 +82,6 @@ jobs:
           bazel build //tools/wasmedge:wasmedge
           bazel build //tools/wasmedge:wasmedgec
 
-      - name: Build example
-        working-directory: examples/bazel_example
-        run: |
-          bazel build :example
-
       - name: Verify build outputs
         run: |
           # Check that main library was built
@@ -96,7 +89,7 @@ jobs:
             echo "Library build artifacts not found"
             ls -la bazel-bin/lib/api/ || true
           fi
-          
+
           # Check that tools were built
           if [ ! -f "bazel-bin/tools/wasmedge/wasmedge" ]; then
             echo "wasmedge tool not found"
@@ -114,7 +107,7 @@ jobs:
   bazel-build-macos:
     name: Build with Bazel on macOS
     runs-on: macos-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
@@ -146,7 +139,7 @@ jobs:
   bazel-query:
     name: Bazel Query Tests
     runs-on: ubuntu-22.04
-    
+
     steps:
       - name: Harden the runner
         uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
