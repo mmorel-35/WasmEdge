@@ -143,11 +143,14 @@ struct span : public detail::span_storage<T, Extent> {
   using detail::span_storage<T, Extent>::size;
 
   constexpr span() noexcept = default;
+  // Non-template constructors for pointers (works for both fixed and dynamic extent)
+  constexpr span(T *first, T *last) noexcept : base(first, last - first) {}
+  constexpr span(T *ptr, size_t count) noexcept : base(ptr, count) {}
   template <class It,
-            enable_if_t<detail::is_compatible_iterator_v<T, It>> * = nullptr>
+            enable_if_t<detail::is_compatible_iterator_v<T, It> && !is_pointer_v<It>> * = nullptr>
   constexpr span(It first, size_t count) noexcept
       : base(to_address(first), count) {}
-  template <class It, enable_if_t<detail::is_compatible_iterator_v<T, It>>>
+  template <class It, enable_if_t<detail::is_compatible_iterator_v<T, It> && !is_pointer_v<It>> * = nullptr>
   constexpr span(It first, It last) noexcept
       : base(to_address(first), last - first) {}
   template <size_t N>
@@ -198,13 +201,13 @@ struct span : public detail::span_storage<T, Extent> {
 
   template <size_t Count> constexpr span<T, Count> first() const {
     static_assert(Count <= Extent);
-    return span<T, Count>(data(), Count);
+    return span<T, Count>(data(), data() + Count);
   }
   constexpr span<T> first(size_t Count) const { return span<T>(data(), Count); }
 
   template <size_t Count> constexpr span<T, Count> last() const {
     static_assert(Count <= Extent);
-    return span<T, Count>(data() + (size() - Count), Count);
+    return span<T, Count>(data() + (size() - Count), data() + size());
   }
   constexpr span<T> last(size_t Count) const {
     return span<T>(data() + (size() - Count), Count);
